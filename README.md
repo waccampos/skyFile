@@ -84,11 +84,11 @@ yarn build:linux
 
 ##### Interface Principal
 
-![alt text](image.png)
+![alt text](resources/image3.png)
 
 ##### Uploads Recentes
 
-![alt text](image2.png)
+![alt text](resources/image2.png)
 
 ### Contribuição
 
