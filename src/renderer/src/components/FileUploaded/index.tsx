@@ -1,7 +1,7 @@
 import { FaCopy } from 'react-icons/fa6'
 import { FaTrashAlt } from 'react-icons/fa'
 import { useDeleteFile } from '@renderer/hooks/useDeleteFile'
-
+import { Iclipboard } from '@renderer/types'
 interface FileLinkProps {
   id: string
   name: string
@@ -9,13 +9,20 @@ interface FileLinkProps {
 }
 
 export function FileLink(props: Readonly<FileLinkProps>): JSX.Element {
-  const copiadorLink = (): void => window.electron.ipcRenderer.send('clipboard', props.link)
+  const copiadorLink = (): void =>
+    window.electron.ipcRenderer.send('clipboard', {
+      clipboard: props.link,
+      Notification: {
+        title: 'Copiado',
+        body: 'Link copiado para o Clipboard!'
+      }
+    } as Iclipboard)
   const { mutate } = useDeleteFile()
 
   return (
     <div className="w-72 h-8 p-3 rounded-lg gap-2 cursor-default flex items-center justify-between self-center hover:bg-blue-700">
       <div className="text-white w-80 text-ellipsis overflow-hidden whitespace-nowrap">
-        {props.name}
+        {props.name.replace('.png', '')}
       </div>
 
       <div className="flex gap-2">

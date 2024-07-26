@@ -1,42 +1,18 @@
 import { useDropzone } from 'react-dropzone'
 import { LuArchiveRestore } from 'react-icons/lu'
 import { Dots } from '../dots'
-import { forwardRef, useState, useImperativeHandle, useEffect } from 'react'
+import { forwardRef, useState, useImperativeHandle } from 'react'
 import Hotkeys from 'react-hot-keys'
-import { usePostFile } from '../../hooks/usePostFile'
+
+import { useReadFileClipboardResponse } from '@renderer/hooks/useReadFileClipboardResponse'
+import { useUploadsFiles } from '@renderer/hooks/useUploadsFiles'
 
 export const AreaDrop = forwardRef((_props, ref) => {
   const [files, setFiles] = useState<File[]>([])
-  useEffect(() => {
-    const handleReadFileClipboardResponse = async (_event, data: string): Promise<void> => {
-      if (!data) return
 
-      const response = await fetch(`data:image/png;base64,${data}`)
-      const blob = await response.blob()
+  useReadFileClipboardResponse(setFiles)
 
-      const timeStampString = new Date().toISOString().replace(/:/g, '-')
-      const file = new File([blob], `${timeStampString}.png`, { type: 'image/png' })
-      setFiles((prevFiles) => [...prevFiles, file])
-    }
-
-    window.electron.ipcRenderer.on('read-file-clipboard-response', handleReadFileClipboardResponse)
-
-    return (): void => {
-      window.electron.ipcRenderer.removeAllListeners('read-file-clipboard-response')
-    }
-  }, [])
-
-  const { mutate, isPending } = usePostFile()
-
-  useEffect(() => {
-    if (files.length > 0) {
-      mutate(files, {
-        onSuccess: () => {
-          setFiles([])
-        }
-      })
-    }
-  }, [files])
+  const isPending = useUploadsFiles(files, setFiles)
 
   const { getInputProps, getRootProps, isDragActive, open } = useDropzone({
     noClick: true,
@@ -49,6 +25,8 @@ export const AreaDrop = forwardRef((_props, ref) => {
   useImperativeHandle(ref, () => ({
     open
   }))
+
+  const dots = Dots()
 
   return (
     <div
@@ -64,8 +42,7 @@ export const AreaDrop = forwardRef((_props, ref) => {
       {isPending && (
         <div className="flex gap-2 items-center">
           <p className="text-white  font-normal align-middle">
-            Uploading {files.length} arquives
-            <Dots />
+            Uploading {files.length} arquives {dots}
           </p>
         </div>
       )}

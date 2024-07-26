@@ -4,15 +4,15 @@ import { useRef } from 'react'
 import { LuFileInput, LuClipboardCopy, LuArchiveRestore, LuExternalLink } from 'react-icons/lu'
 import { BiHide } from 'react-icons/bi'
 import Hotkeys from 'react-hot-keys'
-import { useOptionsWindow } from '@renderer/hooks/useOptionsWindow'
-
+import { useHandlersRenderer } from '@renderer/hooks/useOptionsWindow'
+type AreaDropRef = {
+  open(): unknown
+}
 export function Home(): JSX.Element {
-  const { ipcHandleQuit, ipcHandleHide } = useOptionsWindow()
+  const { ipcHandleQuit, ipcHandleHide, ctrlvAreaDrop } = useHandlersRenderer()
   const navigate = useNavigate()
-  const areaDropRef = useRef(null)
-  const ctrlvAreaDrop = (): void => {
-    window.electron.ipcRenderer.send('read-file-clipboard')
-  }
+  const areaDropRef = useRef<AreaDropRef>(null)
+
   return (
     <div className="w-screen h-screen flex-col bg-zinc-900 bg-opacity-95 rounded-lg align-middle items-center self-center ">
       <Hotkeys keyName="ctrl+q" onKeyDown={ipcHandleQuit} />
