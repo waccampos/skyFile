@@ -20,6 +20,14 @@
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux"
   },
+  "build": {
+    "directories": {
+      "buildResources": "build"
+    },
+    "linux": {
+      "icon": "build/icon.png"
+    }
+  },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",

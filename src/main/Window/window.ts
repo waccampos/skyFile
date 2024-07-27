@@ -29,7 +29,7 @@ export function createWindow(): BrowserWindow {
 
   mainWindow.setMenu(null)
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow.hide()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
