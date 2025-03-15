@@ -42,7 +42,7 @@ cd sky-files
 2. Instale as Dependências:
 
 ```
-yarn install
+yarn
 ```
 
 3. Configure o Supabase:
